@@ -256,7 +256,7 @@ module ChunkyPNG
       when (2...3); [0, chroma, x]
       when (3...4); [0, x, chroma]
       when (4...5); [x, 0, chroma]
-      when (5..6);  [chroma, 0, x]
+      when (5...6); [chroma, 0, x]
       end
     end
     private :cylindrical_to_cubic
@@ -589,7 +589,7 @@ module ChunkyPNG
     #    include_alpha=true (0-255)
     # @see http://en.wikipedia.org/wiki/HSL_and_HSV
     def to_hsv(color, include_alpha = false)
-      hue, chroma, max, _ = hue_and_chroma(color)
+      hue, chroma, max, min = hue_and_chroma(color)
       value      = max
       saturation = chroma.zero? ? 0.0 : chroma.fdiv(value)
 
@@ -714,8 +714,6 @@ module ChunkyPNG
     # @param pixel_before [Integer]
     # @return [Float]
     def euclidean_distance_rgba(pixel_after, pixel_before)
-      return 0.0 if pixel_after == pixel_before
-
       Math.sqrt(
         (r(pixel_after) - r(pixel_before))**2 +
         (g(pixel_after) - g(pixel_before))**2 +

@@ -81,6 +81,7 @@ module ChunkyPNG
             when ChunkyPNG::Chunk::Palette;      ds.palette_chunk = chunk
             when ChunkyPNG::Chunk::Transparency; ds.transparency_chunk = chunk
             when ChunkyPNG::Chunk::ImageData;    ds.data_chunks << chunk
+            when CHunkyPNG::Chunk::DPI;          ds.other_chunks << chunk
             when ChunkyPNG::Chunk::End;          ds.end_chunk = chunk
             else ds.other_chunks << chunk
           end

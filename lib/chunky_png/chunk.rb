@@ -156,6 +156,26 @@ module ChunkyPNG
       end
     end
 
+    class DPI < Base
+      attr_accessor :dpi
+      @len = [9].pack("N")
+      @sign = ["pHYs"].pack("A*")
+
+      def initialize(attrs={})
+        super('pHYs', attrs)
+      end
+
+      def self.read(type, content)
+        dpi = (content.unpack("NNC")[0] / 39.37).round
+        new(dpi)
+      end
+
+      def content
+        [@dpi * 39.37, @dpi * 39.37, 0x01].pack("NNC")
+      end
+
+     end
+
     # The End (IEND) chunk indicates the last chunk of a PNG stream. It does
     # not contain any data.
     class End < Base
@@ -352,6 +372,7 @@ module ChunkyPNG
       'tEXt' => Text,
       'zTXt' => CompressedText,
       'iTXt' => InternationalText,
+      'pHYs' => DPI,
     }
   end
 end

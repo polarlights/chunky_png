@@ -175,18 +175,11 @@ module ChunkyPNG
           raise ChunkyPNG::OutOfBounds, 'Original image height is too small!'
         end
 
-        if crop_width == width && x == 0
-          # We only need to crop off the top and/or bottom, so we can take a
-          # shortcut.
-          replace_canvas!(crop_width, crop_height,
-                          pixels.slice(y * width, width * crop_height))
-        else
-          new_pixels = []
-          for cy in 0...crop_height do
-            new_pixels.concat pixels.slice((cy + y) * width + x, crop_width)
-          end
-          replace_canvas!(crop_width, crop_height, new_pixels)
+        new_pixels = []
+        for cy in 0...crop_height do
+          new_pixels.concat pixels.slice((cy + y) * width + x, crop_width)
         end
+        replace_canvas!(crop_width, crop_height, new_pixels)
       end
 
       # Flips the image horizontally, leaving the original intact.
@@ -273,6 +266,7 @@ module ChunkyPNG
       # @return [ChunkyPNG::Canvas] Itself, but rotated clockwise.
       # @see #rotate_right for a version that leaves the current canvas intact
       def rotate_right!
+        rotated = self.class.new(height, width)
         new_pixels = []
         0.upto(width - 1) { |i| new_pixels += column(i).reverse }
         replace_canvas!(height, width, new_pixels)

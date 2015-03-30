@@ -368,7 +368,10 @@ module ChunkyPNG
       'tEXt' => Text,
       'zTXt' => CompressedText,
       'iTXt' => InternationalText,
+<<<<<<< HEAD
       'pHYs' => DPI,
+=======
+>>>>>>> 06b9bcde7ce1c7035174211c30365338e51b6274
     }
   end
 end

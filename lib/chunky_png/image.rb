@@ -45,6 +45,7 @@ module ChunkyPNG
         if key == 'dpi'
           ChunkyPNG::Chunk::DPI.new(value)
         elsif value.length >= METADATA_COMPRESSION_TRESHOLD
+        if value.length >= METADATA_COMPRESSION_TRESHOLD
           ChunkyPNG::Chunk::CompressedText.new(key, value)
         else
           ChunkyPNG::Chunk::Text.new(key, value)

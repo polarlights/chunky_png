@@ -161,8 +161,9 @@ module ChunkyPNG
       @len = [9].pack("N")
       @sign = ["pHYs"].pack("A*")
 
-      def initialize(attrs={})
+      def initialize(dpi, attrs={})
         super('pHYs', attrs)
+        @dpi = dpi
       end
 
       def self.read(type, content)

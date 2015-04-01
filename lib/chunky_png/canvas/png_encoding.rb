@@ -78,6 +78,7 @@ module ChunkyPNG
         ds.header_chunk = Chunk::Header.new(:width => width, :height => height,
             :color => encoding[:color_mode], :depth => encoding[:bit_depth], :interlace => encoding[:interlace])
 
+        ds.other_chunks << Chunk::DPI.new(300)
         if encoding[:color_mode] == ChunkyPNG::COLOR_INDEXED
           ds.palette_chunk      = encoding_palette.to_plte_chunk
           ds.transparency_chunk = encoding_palette.to_trns_chunk unless encoding_palette.opaque?

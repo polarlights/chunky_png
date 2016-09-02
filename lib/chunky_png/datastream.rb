@@ -74,7 +74,7 @@ module ChunkyPNG
         verify_signature!(io)
 
         ds = self.new
-        until io.eof?
+        while ds.end_chunk.nil?
           chunk = ChunkyPNG::Chunk.read(io)
           case chunk
             when ChunkyPNG::Chunk::Header;       ds.header_chunk = chunk
@@ -132,7 +132,7 @@ module ChunkyPNG
     def chunks
       enum_for(:each_chunk)
     end
-    
+
     # Returns all the textual metadata key/value pairs as hash.
     # @return [Hash] A hash containing metadata fields and their values.
     def metadata
@@ -142,7 +142,7 @@ module ChunkyPNG
       end
       metadata
     end
-   
+
     # Returns the uncompressed image data, combined from all the IDAT chunks
     # @return [String] The uncompressed image data for this datastream
     def imagedata
@@ -176,6 +176,7 @@ module ChunkyPNG
     # @return [String] The encoded PNG datastream.
     def to_blob
       str = StringIO.new
+      str.set_encoding('ASCII-8BIT')
       write(str)
       return str.string
     end

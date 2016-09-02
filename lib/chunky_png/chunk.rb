@@ -161,8 +161,9 @@ module ChunkyPNG
       @len = [9].pack("N")
       @sign = ["pHYs"].pack("A*")
 
-      def initialize(attrs={})
+      def initialize(dpi, attrs={})
         super('pHYs', attrs)
+        @dpi = dpi
       end
 
       def self.read(type, content)
@@ -265,7 +266,11 @@ module ChunkyPNG
 
     class ImageData < Generic
       def self.combine_chunks(data_chunks)
-        Zlib::Inflate.inflate(data_chunks.map { |c| c.content }.join(''))
+        zstream = Zlib::Inflate.new
+        data_chunks.each { |c| zstream << c.content }
+        inflated = zstream.finish
+        zstream.close
+        inflated
       end
 
       def self.split_in_chunks(data, level = Zlib::DEFAULT_COMPRESSION, chunk_size = 2147483647)
@@ -368,10 +373,7 @@ module ChunkyPNG
       'tEXt' => Text,
       'zTXt' => CompressedText,
       'iTXt' => InternationalText,
-<<<<<<< HEAD
       'pHYs' => DPI,
-=======
->>>>>>> 06b9bcde7ce1c7035174211c30365338e51b6274
     }
   end
 end

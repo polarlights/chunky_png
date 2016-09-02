@@ -42,10 +42,9 @@ module ChunkyPNG
     # @see ChunkyPNG::Image::METADATA_COMPRESSION_TRESHOLD
     def metadata_chunks
       metadata.map do |key, value|
-        if key == 'dpi'
+        if key.to_s == "dpi"
           ChunkyPNG::Chunk::DPI.new(value)
         elsif value.length >= METADATA_COMPRESSION_TRESHOLD
-        if value.length >= METADATA_COMPRESSION_TRESHOLD
           ChunkyPNG::Chunk::CompressedText.new(key, value)
         else
           ChunkyPNG::Chunk::Text.new(key, value)
